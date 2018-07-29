@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+form {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+h1{
+	text-align: center;
+}
+h3{
+	text-align: center;
+}
+input {
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 0.75rem;
+ }
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width:100%;
+}
+.button:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+</style>
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+</head>
+<body>
+<h1>管理员界面</h1>
+<br>
+<h3>图书管理</h3><br>
+<form id="selectbook" onsubmit="return false;">
+	查找图书：
+	<br>
+	图书名：<input type="text" id="selectbookname" name="selectbookname"/><br>
+	<input type="submit" name="selectbooksubmit" value="查找图书"><br>
+	<span id="findspan"></span>
+</form>
+<br><hr>
+<form id="addbook" action="" onsubmit="return false;">
+	增加图书：
+	<br>
+	图书名：<input type="text" id="addbookname" name="addbookname" /><br>
+	价格：<input type="text" id="addbookprice" name="addbookprice" /><br>
+	数量：<input type="text" id="addbookstore" name="addbookstore" /><br>
+	<input type="submit" name="addbooksubmit" value="增加图书">
+</form>
+<br><hr>
+<form id="removebook" action="" onsubmit="return false;">
+	删除图书：
+	<br>
+	图书名：<input type="text" id="removebookname" name="removebookname" /><br>
+	<input type="submit" name="removebooksubmit" value="删除图书">
+</form>
+<br><hr>
+<form id="modifybook" action="" onsubmit="return false;">
+	修改图书：
+	<br>
+	图书名：<input type="text" id="modifiedbookname" name="modifiedbookname" /><br>
+	修改为：
+	<br>
+	名字：<input type="text" id="modifybookname" name="modifybookname" /><br>
+	价格：<input type="text" id="modifybookprice" name="modifybookprice" /><br>
+	数量：<input type="text" id="modifybookstore" name="modifybookstore" /><br>
+	<input type="submit" name="modifybooksubmit" value="修改图书">
+</form>
+<br>
+<button  onclick="window.location.href='AdminUser.html'" class="button">进入用户管理</button><br><hr>
+<button  onclick="window.location.href='AdminOrder.html'" class="button">进入订单管理</button>
+
+
+<script type="text/javascript">
+	$("#selectbook").submit(function(){
+		$.ajax({
+			type:"post",
+			url:"selectbook",
+			data:$("#selectbook").serialize(),
+			dataType:"json",
+			success:function(data){
+				if(data.code==1){
+					$(data.msg).each(function(data){
+						var h="图书名为："+this.b_name+
+						"<br>"+"价格为："+this.b_price+
+						"<br>"+"库存为："+this.b_store;
+						$("#findspan").html(h);
+					})
+				}else{
+					alert(data.msg);
+				}
+			}
+		})
+	})
+	
+	$("#addbook").submit(function(){
+		$.ajax({
+			type:"post",
+			url:"addbook",
+			data:$("#addbook").serialize(),
+			dataType:"json",
+			success:function(data){
+				alert(data.msg);
+			}
+		});
+		
+	})
+	
+	
+	$("#removebook").submit(function(data){
+		
+		$.ajax({
+			type:"post",
+			url:"removebook",
+			data:$("#removebook").serialize(),
+			dataType:"json",
+			success:function(data){
+				alert(data.msg);
+			}
+		});
+	})
+	
+	
+	$("#modifybook").submit(function(){
+		
+		$.ajax({
+			type:"post",
+			url:"modifybook",
+			data:$("#modifybook").serialize(),
+			dataType:"json",
+			success:function(data){
+				alert(data.msg);
+			}
+		});
+	})
+
+</script>
+
+
+</body>
+</html>

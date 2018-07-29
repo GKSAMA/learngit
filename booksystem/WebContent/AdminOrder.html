@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+<style>
+table,td
+{
+	text-align:center;
+}
+table
+{
+	width: 700px;
+}
+th
+{
+	height:50px;
+}
+div 
+{
+	margin: 0 auto;
+	width: 700px;
+}
+h2
+{
+	text-align: center;
+}
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
+}
+.button:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+form {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+</style>
+<title>Insert title here</title>
+</head>
+<body>
+<h2>订单管理</h2>
+<br>
+<div>
+订单信息：
+<form id="orderform" action="" onsubmit="return false;">
+<table id= "orderinfo" border="1">
+<tr>
+	<th>已发货</th>
+	<th>未发货</th>
+	<th>已完成</th>
+</tr>
+</table>
+</form>
+</div>
+
+
+
+<script type="text/javascript">
+$("#orderform").load(function(){
+	$.ajax({
+		type:"get",
+		url:"",
+		dataType:"json",
+		success:function(data){
+			if(data.code==1){
+				$(data.msg).each(function(){
+					var states="";
+					if(this.state==0){
+						states=this.
+					}else(this.state==1){
+						
+					}else(this.state==2){
+						
+					}
+					var html='<tr><th>'+
+				})
+			}else{
+				
+			}
+		}
+	})
+})
+
+function del(id){
+	$.ajax({
+		type:"get",
+		url:"deluser?id="+id,
+		dataType:"json",
+		success:function(data){
+			if(data.code==1){
+				window.location.href="AdminUser.html";
+			}else{
+				alert(data.msg);
+			}
+		}
+	})
+}
+function relock(id){
+	$.ajax({
+		type:"get",
+		url:"relockuser?id="+id,
+		dataType:"json",
+		success:function(data){
+			if(data.code==1){
+				window.location.href="AdminUser.html";
+			}else{
+				alert(data.msg);
+			}
+		}
+	})
+}
+
+</script>
+
+
+</body>
+</html>
+</body>
+</html>

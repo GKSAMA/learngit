@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- 加载properties配置文件 -->
+	<properties resource="jdbc.properties"></properties>
+
+<!-- 参数设置 -->
+	<settings>
+	    <!-- 启用懒加载，必须按照下面方式配置 -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<!-- 将积极加载改为消极加载即按需加载。必须写,且为false才会懒加载 -->  
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+
+
+	<!-- 设置别名 -->
+	<typeAliases>
+		<typeAlias type="com.qianfeng.entity.User" alias="user"/>
+		<typeAlias type="com.qianfeng.entity.Book" alias="book"/>
+		<typeAlias type="com.qianfeng.entity.Order" alias="order"/>
+		<typeAlias type="com.qianfeng.entity.OrderItem" alias="item"/>
+	</typeAliases>
+
+	
+	
+	<!-- 加载映射文件 -->
+	<mappers>
+		
+<!-- 		<mapper resource="com/qianfeng/crud/UserMapper.xml" /> -->
+	</mappers>
+</configuration>

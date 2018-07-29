@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间 ,一般写成 包名+类名的形式-->
+<mapper namespace="com.qianfeng.dao.IOrderItemDao">
+	
+	
+	<resultMap type="item" id="itemMapper">
+		<id property="id" column="id"/>
+		<result property="num" column="num"/>
+		<!-- 嵌套结果 -->
+		<association property="orders" resultMap="com.qianfeng.dao.IOrderDao.orderMapper"></association>
+		<association property="book" resultMap="com.qianfeng.dao.IBookDao.bookMapper"></association>
+		
+	</resultMap>
+	
+	<insert id="add" parameterType="item">
+		insert into orderitems(orderId,bookId,num)  
+		values(#{order.id}, #{book.b_id}, #{num})
+	</insert>
+	
+	
+	<select id="findByIndex" parameterType="map" resultMap="itemMapper">
+		select  item.*,o.*,b.*,u.* from orderitems item 
+		INNER JOIN orders o  
+		on o.id = item.orderId 
+		INNER JOIN book b 
+		on b.id = item.bookId 
+		INNER JOIN user u 
+		on u.id = o.buyerId 
+		where u.username = #{name} and o.id 
+		in (select t.id from (select id from orders limit #{index},#{size}) t)
+	
+	</select>
+	
+</mapper>
+
+
+
+
+

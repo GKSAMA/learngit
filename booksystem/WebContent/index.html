@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+<link type="text/css" rel="stylesheet" href="css/pagination.css" />
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.pagination.js"></script>
+</head>
+<body>
+	<div id="header" class="wrap">
+		<div id="logo">网上书城</div>
+		<div id="navbar">
+			<div class="userMenu">
+				<ul>
+					<li class="current"><a href="index.html">首页</a></li>
+					<li><a href="orderlist.html">我的订单</a></li>
+					<li><a href="shopping.html">购物车</a></li>
+					<li><a href="logout">注销</a></li>
+				</ul>
+			</div>
+			<form method="get" name="search" action="">
+				搜索：<input class="input-text" type="text" name="keywords" /><input
+					class="input-btn" type="submit" name="submit" value="" />
+			</form>
+		</div>
+	</div>
+	<div id="content" class="wrap">
+		<div class="list bookList">
+			<form id="tableform" method="post" name="shoping"
+				action="shopping.html" onsubmit="return false;">
+				<table>
+					<tr class="title">
+						<th class="checker"></th>
+						<th>书名</th>
+						<th class="price">价格</th>
+						<th class="store">库存</th>
+						<th class="view">图片预览</th>
+					</tr>
+
+				</table>
+
+				<div class="button">
+					<input class="input-btn" type="submit" name="submit" value="" />
+				</div>
+
+			</form>
+
+		</div>
+	</div>
+	<div class="m-style"></div>
+	<div id="footer" class="wrap">XXXXXXXXX &copy; 版权所有</div>
+<!-- 分页技术实现
+	使用jquery.pagination.js脚本实现
+ -->
+	<script type="text/javascript">
+$('.m-style').pagination({
+    pageCount: 3,
+    showData:5,
+    prevContent:"上一页",
+    nextContent:"下一页",
+    coping:true,
+    callback: function getDataList(api) {		//callback在每次点击页面时调用
+    	this.init;
+    	var page=api.getCurrent();
+     	console.log(page);
+    		$.ajax({
+            	type:"post",
+            	url:"book",
+            	data:{"page":page},
+            	dataType:"json",
+            	success:function(result){
+            		$("table tr:gt(0)").remove();
+            		if(result.code==1){
+						//alert(result.msg.b_id);
+            			$(result.msg).each(function(index){
+            				var html='';
+            				if(index%2==0){
+            					html+="<tr>";
+            				}else{
+            					html+="<tr class=\"odd\">";
+            				}
+            				html +=	"<td><input type=\"checkbox\" name=\"bookId\" value=\""+
+            						this.b_id+"\" /></td><td class=\"title\">"+
+            						this.b_name+"</td><td>￥"+this.b_price+"</td><td>"+
+            						this.b_store+"</td><td class=\"thumb\"><img src=\"images/book/book_"+
+            						this.b_id+".gif\" /></td></tr>";
+            				$("table").append($(html));
+            			})
+            			console.log("清除数据");
+            			
+            		}else{
+            			alert(result.msg);
+            		}
+    			}
+            	//清除之前页
+//             	if(result!=null){
+            		
+//             	}
+    		})
+ 		}	
+	}//注意这个括号，把callback和参数配置放在一起
+	,function(){						//初始化，生成第一页，之后不再调用
+ 		console.log("初始化");
+ 		$.ajax({
+        	type:"post",
+        	url:"book",
+        	data:{"page":1},
+        	dataType:"json",
+        	success:function(result){
+        		if(result.code==1){
+					
+        			$(result.msg).each(function(index){
+        				var html='';
+        				if(index%2==0){
+        					html+="<tr>";
+        				}else{
+        					html+="<tr class=\"odd\">";
+        				}
+        				html +=	"<td><input type=\"checkbox\" name=\"bookId\" value=\""+
+        						this.b_id+"\" /></td><td class=\"title\">"+
+        						this.b_name+"</td><td>￥"+this.b_price+"</td><td>"+
+        						this.b_store+"</td><td class=\"thumb\"><img src=\"images/book/book_"+
+        						this.b_id+".gif\" /></td></tr>";
+        				$("table").append($(html));
+        			})
+        		}else{
+        			alert(result.msg);
+        		}
+			}
+		}) 	
+ 	});
+
+
+</script>
+
+<script type="text/javascript">
+
+$("#tableform").submit(function(){
+	if($(":checkbox:checked").length < 1 ){
+		alert("请选择书籍");
+		return;
+	}
+	
+	$.ajax({
+		type:"post",
+		url:"carts",
+		data:$("#tableform").serialize(),
+		dataType:"json",
+		success:function(data){
+			if(data.code==1){
+				window.location.href="shopping.html";
+			}else{
+				alert(data.msg);
+			}
+		}
+	})
+})
+
+
+
+</script>
+
+<script type="text/javascript">
+// function Logout(){
+// 	$.ajax({
+// 		url:"logout",
+// 		success:function(){
+// 			window.location.href="login.html";
+// 		}
+// 	})
+// }
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间 ,一般写成 包名+类名的形式-->
+<mapper namespace="com.qianfeng.dao.IUserDao">
+	
+	
+	<resultMap type="user" id="userMapper">
+		<!-- id主键  
+			property 实体类中的属性
+			column 表中的字段
+		 -->
+		<id property="id" column="id"/>
+		
+		<!-- 非主键 -->
+		<result property="userName" column="userName" />
+		<result property="password" column="password"/>
+		<result property="email" column="email"/>
+		<result property="isLock" column="isLock"/>
+		<result property="regDate" column="regDate"/>
+		<result property="failure_num" column="failure_num"/>
+	</resultMap>
+	<!-- 根据用户名和密码找用户 -->
+	<select id="findInfo" parameterType="user" resultMap="userMapper">
+		select * from user where username =#{userName} and password=#{password}
+	</select>
+	<!-- 根据用户名找用户 -->
+	<select id="findUser" parameterType="string" resultMap="userMapper">
+		select * from user where username=#{userName}
+	</select>
+	<!-- 根据id找用户 -->
+	<select id="findUserById" parameterType="int" resultMap="userMapper">
+		select * from user where id=#{id}
+	</select>
+	<!-- 失败加一 -->
+	<update id="failLog" parameterType="string">
+		update user set failure_num=failure_num+1 where username=#{userName}
+	</update>
+	<select id="GetFailNum" parameterType="user" resultMap="userMapper">
+		select failure_num from user where username=#{userName}
+	</select>
+	
+	<!-- 锁 -->
+	<update id="LockUser" parameterType="string">
+		update user set islock=1 where username=#{username}
+	</update>
+	
+	<!-- 是否锁 -->
+	<select id="IsLock" parameterType="user" resultMap="userMapper">
+		select islock from user where username =#{userName}
+	</select>
+	<!-- 加用户 -->
+	<insert id="addUser" parameterType="user">
+		insert into user(username, password,email) values(#{userName}, #{password},#{email})
+	</insert>
+	<!-- 删用户 -->
+	<delete id="delUser" parameterType="String">
+		delete from user where username=#{username}
+	</delete>
+	<!-- 解锁用户 -->
+	<update id="RelockUser" parameterType="String">
+		update user set islock=0 where username=#{username}
+	</update>
+</mapper>
+
+
+
+
+

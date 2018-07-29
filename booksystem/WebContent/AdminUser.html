@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+<style>
+table,td
+{
+	text-align:center;
+}
+table
+{
+	width: 700px;
+}
+th
+{
+	height:50px;
+}
+div 
+{
+	margin: 0 auto;
+	width: 700px;
+}
+h2
+{
+	text-align: center;
+}
+.button {
+    background-color: #33CCFF; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
+}
+.button1 {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
+    width:100%;
+}
+.button:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+.button1:hover {
+    background-color: #34CFCF; /* Green */
+    color: white;
+}
+form {
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+</style>
+<title>Insert title here</title>
+</head>
+<body>
+<h2>用户管理</h2>
+<br>
+<div>
+<form id="finduser" action="" onsubmit="return false;">
+	查询用户：
+	<br>
+	用户名：<input type="text" id="findu" name="findu"/><br>
+		<input type="submit" name="findusersubmit" value="查找用户" class="button"><br>
+		<span id="findspan"></span>
+	
+</form>
+</div>
+<button  onclick="window.location.href='AdminOrder.html'" class="button1">进入订单管理</button><br><hr>
+<button  onclick="window.location.href='Admin.html'" class="button1">进入图书管理</button>
+<div>
+<table id= "usertable" border="1">
+<tr>
+	<th>用户名</th>
+	<th>用户状态</th>
+	<th>操作</th>
+</tr>
+</table>
+</div>
+
+
+
+<script type="text/javascript">
+$("#finduser").submit(function(){
+	var name = $("#findu").val();
+	if(name==null||name.length==0){
+		$("#findspan").html("必须输入用户名");
+		return;
+	}
+	
+	$.ajax({
+		type:"post",
+		url:"finduser",
+		data:$("#finduser").serialize(),
+		dataType:"json",
+		success:function(data){
+			if(data.code==1){
+				$(data.msg).each(function(){
+					var h="用户名为："+this.userName+
+					"<br>"+"密码为："+this.password+
+					"<br>"+"邮箱为："+this.email+
+					"<br>"+"是否锁定："+this.isLock;
+					$("#findspan").html(h);
+					if(this.isLock==1){
+						var a="锁定";
+					}else{
+						var a="正常";
+					}
+					var tb="<tr id=\""+this.id+"\"><th>"+this.userName+"</th><th>"+a
+							+"</th><th><a href=\"javascript:relock("+this.id+")\">解锁</a>&nbsp;<a href=\"javascript:del("+this.id+")\">删除</a></th></td>";
+					$("table").append(tb);
+				})
+			}else{
+				alert(data.msg);
+			}
+		}
+	})
+})
+
+function del(id){
+	$.ajax({
+		type:"get",
+		url:"deluser?id="+id,
+		dataType:"json",
+		success:function(data){
+			if(data.code==1){
+				window.location.href="AdminUser.html";
+			}else{
+				alert(data.msg);
+			}
+		}
+	})
+}
+function relock(id){
+	$.ajax({
+		type:"get",
+		url:"relockuser?id="+id,
+		dataType:"json",
+		success:function(data){
+			if(data.code==1){
+				window.location.href="AdminUser.html";
+			}else{
+				alert(data.msg);
+			}
+		}
+	})
+}
+
+</script>
+
+
+</body>
+</html>

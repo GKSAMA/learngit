@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间 ,一般写成 包名+类名的形式-->
+<mapper namespace="com.qianfeng.dao.IBookDao">
+	
+	
+	<resultMap type="book" id="bookMapper">
+		<!-- id主键  
+			property 实体类中的属性
+			column 表中的字段
+		 -->
+		<id property="b_id" column="b_id"/>
+		
+		<!-- 非主键 -->
+		<result property="b_name" column="b_name" />
+		<result property="b_price" column="b_price"/>
+		<result property="b_store" column="b_store"/>
+		<result property="del" column="del"/>
+	</resultMap>
+	<!-- 按当前页查找记录 -->
+	<select id="findBookByPage" parameterType="int" resultType="book">
+		select * from book where b_id between (#{page}-1)*5+1 and #{page}*5
+	</select>
+	
+	
+	
+	<!-- 按名字找书 -->
+	<select id="findBookByName" parameterType="string" resultMap="bookMapper">
+		select * from book where b_name=#{b_name}
+	</select>
+	<!-- 加书 -->
+	<insert id="ADDBook" parameterType="book">
+		insert into book(b_name,b_price,b_store) values(#{b_name},#{b_price},#{b_store})
+	</insert>
+	
+	<!-- 删除书 -->
+	<update id="RemoveBook" parameterType="book">
+		update book set del=1 where b_name=#{b_name}
+	</update>
+	<!-- 修改书 -->
+	<update id="ModifyBook" parameterType="book">
+		update book set b_name=#{b_name} , b_price=#{b_price} , b_store=#{b_store} where b_id = #{b_id}
+	</update>
+	<!-- 是否删除 -->
+	<select id="IsDelete" parameterType="book" resultType="int">
+		select del from book where b_name = #{b_name}
+	</select>
+	<!-- 按数组找书 -->
+	<select id="findByIds" parameterType="map" resultMap="bookMapper">
+		
+		select * from book where b_id  
+		in <foreach collection="array" item="i" open="(" close=")" separator=",">
+			#{i}
+		</foreach>
+	
+	</select>
+</mapper>
+
+
+
+
+

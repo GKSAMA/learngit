@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+<script type="text/javascript" src="js/jquery-1.12.2.min.js"></script>
+
+</head>
+<body>
+<div id="header" class="wrap">
+	<div id="logo">网上书城</div>
+	<div id="navbar">
+		<form method="get" name="search" action="">
+			搜索：<input class="input-text" type="text" name="keywords" /><input class="input-btn" type="submit" name="submit" value="" />
+		</form>
+	</div>
+</div>
+<div id="register">
+	<div class="title">
+		<h2>欢迎注册</h2>
+	</div>
+	<div class="steps">
+		<ul class="clearfix">
+			<li class="current">1.填写注册信息</li>
+			<li class="unpass">2.注册成功</li>
+		</ul>
+	</div>
+	<form id="rform" method="post" action="register_success.html" onsubmit="return false;">
+		<dl>
+			<dt>用 户 名：</dt>
+			<dd><input id="rname" class="input-text" type="text" name="userName" /><span id="rsusernaeme"></span></dd>
+			<dt>密　　码：</dt>
+			<dd><input id="rpassword" class="input-text" type="password" name="passWord" /><span id="rsuserpwd"></span></dd>
+			<dt>确认密码：</dt>
+			<dd><input id="rpasswordr" class="input-text" type="password" name="rePassWord" /><span id="rsuserpwdr"></span></dd>
+			<dt>Email地址：</dt>
+			<dd><input id="remail" class="input-text" type="text" name="email" /><span id="rsemail"></span></dd>
+			<dt></dt>
+			<dd class="button"><input class="input-reg" type="submit" name="register" value="" /></dd>
+		</dl>
+	</form>
+</div>
+<div id="footer" class="wrap">
+	XXXXXXXXX &copy; 版权所有
+<script type="text/javascript">
+	
+	
+	$("#rform").submit(function(){
+		//用户名操作
+		var name = $("#rname").val();
+		if(name==null||name.length==0){
+			$("#rsusernaeme").html("必须输入用户名");
+			return;
+		}
+		$("#rsusernaeme").html(" ");
+		
+		//密码
+		var pwd = $("#rpassword").val();
+		if(pwd==null||pwd.length==0){
+			$("#rsuserpwd").html("必须输入密码");
+			return;
+		}
+		if(pwd.length<6){
+			$("#rsuserpwd").html("密码不能少于6位");
+			return;
+		}
+		$("#rsuserpwd").html(" ");
+		
+		var pwdr = $("#rpasswordr").val();
+		if(pwdr==null||pwdr.length==0){
+			$("#rsuserpwdr").html("请再次输入密码");
+			return;
+		}else if(pwd!=pwdr){
+			$("#rsuserpwdr").html("两次输入的密码必须一致");
+			return;
+		}
+		$("#rsuserpwdr").html(" ");
+		//邮箱
+		var email = $("#remail").val();
+		if(email==null||email.length==0){
+			$("#rsemail").html("必须输入邮箱");
+			return;
+		}
+		if(email.indexOf("@")==-1){
+			$("#rsemail").html("邮箱格式不合法");
+			return;
+		}
+		$("#rsemail").html(" ");
+		
+		$.ajax({
+			type:"post",
+			url:"register",
+			data:$("#rform").serialize(),
+			dataType:"json",
+			success:function(data){
+				if(data.code==1){
+					window.location.href="register_success.html";
+				}else{
+					alert(data.msg);
+				}
+			}
+		})
+	})
+	
+</script>
+
+
+</div>
+</body>
+</html>

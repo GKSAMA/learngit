@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间 ,一般写成 包名+类名的形式-->
+<mapper namespace="com.qianfeng.dao.IOrderDao">
+	
+	
+	<resultMap type="order" id="orderMapper">
+		<!-- id主键  
+			property 实体类中的属性
+			column 表中的字段
+		 -->
+		<id property="id" column="id"/>
+		<result property="orderNum" column="ordernum"/>
+		<result property="totalPrice" column="totalprice"/>
+		<result property="createDate" column="createdate"/>
+		<result property="state" column="state"/>
+		<!-- 体现表之间一对一的关系 -->
+		<association property="buyer" resultMap="com.qianfeng.dao.IUserDao.userMapper"></association>
+	</resultMap>
+	
+	<!-- 一定不要用order，是MySQL的关键字 -->
+	<insert id="add" parameterType="order" useGeneratedKeys="true" keyProperty="id">
+		insert into orders(ordernum,totalprice,createdate,state,buyerId) values(#{orderNum}, #{totalPrice}, #{createDate}, 0, #{buyer.id})
+	</insert>
+	
+	
+</mapper>
+
+
+
+
+
